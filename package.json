@@ -1,0 +1,13 @@
+{
+  "name": "mern-boilerplate-ts",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "concurrently \"pnpm --filter server dev\" \"pnpm --filter client dev\"",
+    "start": "pnpm --filter server start",
+    "build": "pnpm --filter client build"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  }
+}
