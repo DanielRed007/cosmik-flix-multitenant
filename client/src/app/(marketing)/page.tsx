@@ -6,7 +6,7 @@ export default function HomePage() {
   return (
     <>
       <main className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-slate-900 to-slate-700 text-white">
-        <h1 className="text-6xl font-bold mb-6">Welcome to Your App</h1>
+        <h1 className="text-6xl font-bold mb-6">Cosmik - Your universal movie Catalog</h1>
         <p className="text-xl mb-12 max-w-2xl text-center">
           The most powerful MERN replacement built with Next.js 16, React 19 and shadcn/ui.
         </p>
