@@ -1,6 +1,3 @@
-// app/(marketing)/page.tsx   ← this becomes https://yoursite.com/ (or /home if you redirect)
-import HomepageCardSection from "@/components/cosmik/homepage-card-section";
-import Navbar from "@/components/cosmik/homepage-navbar";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
