@@ -26,6 +26,9 @@ importers:
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
+      google:
+        specifier: link:@next/font/google
+        version: link:@next/font/google
       lucide-react:
         specifier: ^0.556.0
         version: 0.556.0(react@19.2.1)
