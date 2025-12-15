@@ -1,6 +1,8 @@
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import HomePage from './(marketing)/page'
+import Navbar from '@/components/cosmik/homepage-navbar'
+import HomepageCardSection from '@/components/cosmik/homepage-card-section'
 
 
 
@@ -14,6 +16,10 @@ export default async function Home() {
   // redirect("/home");
 
   return (
-    <HomePage></HomePage>
+    <>
+      <Navbar/>
+      <HomePage></HomePage>
+      <HomepageCardSection />
+    </>
   )
 }
