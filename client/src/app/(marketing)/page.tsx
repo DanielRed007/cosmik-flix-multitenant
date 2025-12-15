@@ -1,4 +1,6 @@
 // app/(marketing)/page.tsx   ← this becomes https://yoursite.com/ (or /home if you redirect)
+import HomepageCardSection from "@/components/cosmik/homepage-card-section";
+import Navbar from "@/components/cosmik/homepage-navbar";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
@@ -15,11 +17,12 @@ export default function HomePage() {
           <Button asChild size="lg">
             <Link href="/sign-up">Get Started</Link>
           </Button>
-          <Button asChild size="lg" variant="outline" className="text-white border-white hover:bg-white hover:text-slate-900">
+          <Button asChild size="lg" className="text-white border-white">
             <Link href="/sign-in">Sign In</Link>
           </Button>
         </div>
       </main>
+      
     </>
   );
 }
