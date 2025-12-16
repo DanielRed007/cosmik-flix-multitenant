@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { DM_Sans } from "next/font/google";
+import { BBH_Sans_Bartle, DM_Sans } from "next/font/google";
 import { Toaster } from "@/components/ui/sonner";
 import "./globals.css";
 
@@ -8,6 +8,13 @@ const dmSans = DM_Sans({
   weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900'],
   style: ['normal', 'italic'],
   variable: '--font-dm-sans',
+  display: 'swap',
+});
+
+const bbhBartle = BBH_Sans_Bartle({
+  subsets: ['latin'],
+  weight: ['400'],
+  variable: '--font-bbh-bartle',
   display: 'swap',
 });
 
@@ -22,7 +29,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${dmSans.variable}`}>
+    <html lang="en" className={`${dmSans.variable} ${bbhBartle.variable}`}>
       <body
         className={`font-dm-sans antialiased bg-slate-900 text-white`}
       >

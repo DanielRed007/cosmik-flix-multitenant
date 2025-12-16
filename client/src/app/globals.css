@@ -4,6 +4,8 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
+  --font-bbh-bartle: var(--font-bbh-bartle), system-ui, sans-serif;
+    --font-dm-sans: var(--font-dm-sans), system-ui, sans-serif;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
@@ -44,6 +46,7 @@
 }
 
 :root {
+  --electric-green: #00FF9D;
   --radius: 0.625rem;
   --background: oklch(1 0 0);
   --foreground: oklch(0.147 0.004 49.25);
@@ -119,4 +122,77 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+@keyframes pulse-glow {
+
+  0%,
+  100% {
+    text-shadow: 0 0 10px rgba(163, 255, 153, 0.5);
+  }
+
+  50% {
+    text-shadow: 0 0 30px rgba(163, 255, 153, 0.8), 0 0 50px rgba(163, 255, 153, 0.4);
+  }
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 4s ease-in-out infinite;
+}
+
+@keyframes pulse-glow {
+
+  0%,
+  100% {
+    text-shadow: 0 0 10px rgba(163, 255, 153, 0.5);
+  }
+
+  50% {
+    text-shadow: 0 0 30px rgba(163, 255, 153, 0.8), 0 0 50px rgba(163, 255, 153, 0.4);
+  }
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 4s ease-in-out infinite;
+}
+
+@keyframes logo-entrance {
+  0% {
+    opacity: 0;
+    transform: translateY(40px) scale(0.9);
+    text-shadow: none;
+  }
+
+  60% {
+    opacity: 1;
+    transform: translateY(0) scale(1.05);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    text-shadow:
+      0 0 20px rgba(163, 255, 153, 0.6),
+      0 0 40px rgba(163, 255, 153, 0.4);
+  }
+}
+
+.animate-logo-entrance {
+  animation: logo-entrance 1.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes pulse-glow-icon {
+
+  0%,
+  100% {
+    box-shadow: 0 0 15px rgba(163, 255, 153, 0.4);
+  }
+
+  50% {
+    box-shadow: 0 0 30px rgba(163, 255, 153, 0.8);
+  }
+}
+
+.animate-pulse-glow-icon {
+  animation: pulse-glow-icon 3s ease-in-out infinite;
 }
