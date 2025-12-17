@@ -69,10 +69,10 @@ export default function PricingPage() {
       <section className="relative overflow-hidden bg-gradient-to-br from-lime-300 via-electric-green-400 to-lime-200 py-24 md:py-32">
         <div className="absolute inset-0 bg-grid-slate-900/10"></div>
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-6xl md:text-7xl lg:text-8xl font-bbh-bartle uppercase tracking-tight text-slate-900 mb-8 drop-shadow-2xl animate-pulse-glow">
+          <h1 className="text-4xl md:text-4xl lg:text-5xl font-bbh-bartle uppercase tracking-tight text-slate-900 mt-10 mb-2 drop-shadow-2xl animate-pulse-glow">
             Simple Pricing
           </h1>
-          <p className="text-2xl md:text-3xl font-dm-sans text-slate-800 max-w-5xl mx-auto mb-12">
+          <p className="text-2xl md:text-xl font-dm-sans text-slate-800 max-w-5xl mx-auto mb-12">
             Choose the perfect plan for your movie obsession. Cancel anytime.
           </p>
 
@@ -112,7 +112,7 @@ export default function PricingPage() {
             {plans.map((plan) => (
               <div
                 key={plan.name}
-                className={`relative bg-white/70 backdrop-blur-lg border-2 rounded-3xl p-10 transition-all duration-500 hover:-translate-y-6 hover:shadow-2xl hover:shadow-lime-500/50 ${
+                className={`relative bg-white/70 backdrop-blur-lg border-2 rounded-3xl p-7 transition-all duration-500 hover:-translate-y-6 hover:shadow-2xl hover:shadow-lime-500/50 ${
                   plan.popular
                     ? "border-lime-500 shadow-lime-500/30 scale-105"
                     : "border-white/40"
@@ -127,26 +127,26 @@ export default function PricingPage() {
                 )}
 
                 <div className="text-center mb-10">
-                  <h3 className="text-2xl font-bbh-bartle text-slate-900 mb-3">
+                  <h3 className="text-xl font-bbh-bartle text-slate-900 mb-3">
                     {plan.name}
                   </h3>
                   <p className="text-lg font-dm-sans text-slate-700">{plan.description}</p>
                 </div>
 
                 <div className="text-center mb-10">
-                  <span className="text-4xl font-bbh-bartle text-slate-900">
+                  <span className="text-3xl font-bbh-bartle text-slate-900">
                     ${isAnnual ? plan.annualPrice : plan.monthlyPrice}
                   </span>
-                  <span className="text-2xl font-dm-sans text-slate-700">
+                  <span className="text-xl font-dm-sans text-slate-700">
                     {plan.monthlyPrice === 0 ? "" : isAnnual ? "/year" : "/month"}
                   </span>
                 </div>
 
-                <ul className="space-y-5 mb-12">
+                <ul className="space-y-5 mb-7">
                   {plan.features.map((feature) => (
                     <li key={feature} className="flex items-center gap-4">
                       <Check className="h-7 w-7 text-lime-600 flex-shrink-0 animate-pulse" />
-                      <span className="text-lg font-dm-sans text-slate-800">{feature}</span>
+                      <span className="text-md font-dm-sans text-slate-800">{feature}</span>
                     </li>
                   ))}
                 </ul>
@@ -160,7 +160,7 @@ export default function PricingPage() {
                       : "bg-white/80 hover:bg-white text-slate-900 border-2 border-slate-900"
                   }`}
                 >
-                  <Link href={plan.name === "Enterprise" ? "/contact" : "/sign-up"}>
+                  <Link href={plan.name === "Enterprise" ? "/about" : "auth/sign-up"}>
                     {plan.cta}
                   </Link>
                 </Button>
@@ -173,14 +173,14 @@ export default function PricingPage() {
       {/* CTA Section */}
       <section className="py-24 bg-gradient-to-br from-electric-green-400 to-lime-300">
         <div className="max-w-4xl mx-auto text-center px-4">
-          <h2 className="text-5xl md:text-6xl font-bbh-bartle uppercase text-slate-900 mb-8 drop-shadow-lg">
+          <h2 className="text-2xl md:text-4xl font-bbh-bartle uppercase text-slate-900 mb-8 drop-shadow-lg">
             Ready to dive in?
           </h2>
-          <p className="text-2xl font-dm-sans text-slate-800 mb-12">
+          <p className="text-xl font-dm-sans text-slate-800 mb-12">
             Start free today – upgrade when you're ready.
           </p>
           <Button asChild size="lg" className="bg-white hover:bg-slate-100 text-slate-900 font-bold text-xl px-12 py-8 shadow-2xl hover:shadow-lime-500/40">
-            <Link href="/sign-up">Get Started Free</Link>
+            <Link href="auth/sign-up">Get Started Free</Link>
           </Button>
         </div>
       </section>

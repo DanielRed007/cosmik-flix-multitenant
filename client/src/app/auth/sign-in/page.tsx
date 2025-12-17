@@ -16,7 +16,6 @@ import {
 } from '@/components/ui/card';
 import { apiFetch } from '../../../utils/api';
 import { useAuthStore } from '../../../store/authStore';
-import { useNavigate } from 'react-router-dom';
 import { LoginResponse } from '../../../types/auth';
 import { Loader2, Eye, EyeOff } from 'lucide-react';
 import { toast } from 'sonner';

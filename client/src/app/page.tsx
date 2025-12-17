@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import HomePage from './(marketing)/page'
+import HomePage from './home/page'
 import Navbar from '@/components/cosmik/homepage-navbar'
 import HomepageCardSection from '@/components/cosmik/homepage-card-section'
 

@@ -124,7 +124,7 @@ export default function AboutPage() {
           </p>
           <div className="flex flex-col sm:flex-row gap-6 justify-center">
             <Button asChild size="lg" className="bg-white hover:bg-slate-100 text-slate-900 font-bold text-xl px-10 py-7 shadow-2xl hover:shadow-lime-500/40">
-              <Link href="/sign-up">Get Started Free</Link>
+              <Link href="auth/sign-up">Get Started Free</Link>
             </Button>
             <Button asChild size="lg" variant="outline" className="bg-transparent text-slate-900 border-4 border-slate-900 hover:bg-slate-900 hover:text-white font-bold text-xl px-10 py-7 backdrop-blur-sm">
               <Link href="/features">Explore Features</Link>
