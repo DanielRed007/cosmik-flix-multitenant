@@ -22,7 +22,7 @@ export default function Navbar() {
           <div className="flex-shrink-0">
             <Link
               href="/"
-              className="relative text-4xl font-bbh-bartle uppercase tracking-tight text-slate-900 inline-block animate-pulse-glow"
+              className="relative text-2xl font-bbh-bartle uppercase tracking-tight text-slate-900 inline-block animate-pulse-glow"
             >
               Cosmik
             </Link>
@@ -35,7 +35,7 @@ export default function Navbar() {
                 <Link
                   key={link.name}
                   href={link.href}
-                  className="text-lg font-dm-sans font-medium text-slate-800 hover:text-lime-600 transition-colors"
+                  className="text-sm font-dm-sans font-medium text-slate-800 hover:text-lime-600 transition-colors"
                 >
                   {link.name}
                 </Link>
@@ -47,7 +47,7 @@ export default function Navbar() {
           <div className="hidden md:flex items-center space-x-4">
             <Link
               href="/sign-in"
-              className="text-lg font-dm-sans font-medium text-slate-800 hover:text-lime-600 transition-colors"
+              className="text-sm font-dm-sans font-medium text-slate-800 hover:text-lime-600 transition-colors"
             >
               Sign In
             </Link>
@@ -81,7 +81,7 @@ export default function Navbar() {
                 key={link.name}
                 href={link.href}
                 onClick={() => setIsOpen(false)}
-                className="block px-4 py-3 text-lg font-dm-sans font-medium text-slate-800 hover:bg-lime-100 rounded-lg transition-colors"
+                className="block px-4 py-3 text-sm font-dm-sans font-medium text-slate-800 hover:bg-lime-100 rounded-lg transition-colors"
               >
                 {link.name}
               </Link>
@@ -90,14 +90,14 @@ export default function Navbar() {
               <Link
                 href="/sign-in"
                 onClick={() => setIsOpen(false)}
-                className="block px-4 py-3 text-lg font-dm-sans font-medium text-slate-800 hover:bg-lime-100 rounded-lg text-center transition-colors"
+                className="block px-4 py-3 text-sm font-dm-sans font-medium text-slate-800 hover:bg-lime-100 rounded-lg text-center transition-colors"
               >
                 Sign In
               </Link>
               <Link
                 href="/sign-up"
                 onClick={() => setIsOpen(false)}
-                className="block px-6 py-3 bg-lime-500 text-slate-900 font-semibold rounded-full text-center shadow-lg hover:bg-lime-400 transition-all"
+                className="block px-3 py-1 bg-lime-500 text-sm text-slate-900 font-semibold rounded-full text-center shadow-lg hover:bg-lime-400 transition-all"
               >
                 Get Started
               </Link>
