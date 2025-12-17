@@ -14,8 +14,23 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import { apiFetch } from '../../../utils/api';
+import { useAuthStore } from '../../../store/authStore';
+import { useNavigate } from 'react-router-dom';
+import { LoginResponse } from '../../../types/auth';
 import { Loader2, Eye, EyeOff } from 'lucide-react';
 import { toast } from 'sonner';
+
+// const handleLogout = async () => {
+//   try {
+//     await apiFetch('/logout', { method: 'POST' });
+//   } catch {
+//     // Proceed anyway
+//   } finally {
+//     useAuthStore.getState().logout();
+//     navigate('/login');
+//   }
+// };
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -49,8 +64,10 @@ export default function LoginPage() {
         toast.success('Welcome back!', {
           description: 'Redirecting to dashboard...',
         });
-        // Redirect to home or dashboard after successful login
-        setTimeout(() => router.push('/dashboard'), 1500); // adjust path as needed
+        
+        useAuthStore.getState().login(data.accessToken, data.user);
+
+        setTimeout(() => router.push('/dashboard'), 1500);
       } else {
         toast.error(data.message || 'Invalid credentials. Please try again.');
       }
