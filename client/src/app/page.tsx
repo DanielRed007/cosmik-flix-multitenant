@@ -11,7 +11,6 @@ export default async function Home() {
     cache: "no-store", // or "force-cache", etc.
   })
   const data = await res.json()
-  console.log(data)
 
   // redirect("/home");
 

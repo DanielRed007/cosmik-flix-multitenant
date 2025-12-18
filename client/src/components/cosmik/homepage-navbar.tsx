@@ -46,13 +46,13 @@ export default function Navbar() {
           {/* Desktop CTAs - Right */}
           <div className="hidden md:flex items-center space-x-4">
             <Link
-              href="/sign-in"
+              href="/auth/sign-in"
               className="text-sm font-dm-sans font-medium text-slate-800 hover:text-lime-600 transition-colors"
             >
               Sign In
             </Link>
             <Link
-              href="/sign-up"
+              href="/auth/sign-up"
               className="px-6 py-3 bg-lime-500 text-slate-900 font-semibold rounded-full hover:bg-lime-400 shadow-lg hover:shadow-lime-500/30 transition-all"
             >
               Get Started
@@ -88,14 +88,14 @@ export default function Navbar() {
             ))}
             <div className="pt-4 space-y-3">
               <Link
-                href="/sign-in"
+                href="/auth/sign-in"
                 onClick={() => setIsOpen(false)}
                 className="block px-4 py-3 text-sm font-dm-sans font-medium text-slate-800 hover:bg-lime-100 rounded-lg text-center transition-colors"
               >
                 Sign In
               </Link>
               <Link
-                href="/sign-up"
+                href="/auth/sign-up"
                 onClick={() => setIsOpen(false)}
                 className="block px-3 py-1 bg-lime-500 text-sm text-slate-900 font-semibold rounded-full text-center shadow-lg hover:bg-lime-400 transition-all"
               >
