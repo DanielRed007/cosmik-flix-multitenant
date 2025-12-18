@@ -3,7 +3,7 @@ import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
 import type {} from '@redux-devtools/extension'; // Important for TS support
 
-import { AuthState, User } from '../types/auth';
+import { AuthState, SessionUser } from '../types/auth';
 
 export const useAuthStore = create<AuthState>()(
   devtools(
@@ -12,7 +12,7 @@ export const useAuthStore = create<AuthState>()(
       user: null,
       isAuthenticated: false,
 
-      login: (accessToken: string, user: User) =>
+      login: (accessToken: string, user: SessionUser) =>
         set(
           { accessToken, user, isAuthenticated: true },
           false,
@@ -30,10 +30,7 @@ export const useAuthStore = create<AuthState>()(
         set({ accessToken }, false, 'auth/setAccessToken'),
     }),
     {
-      name: 'AuthStore', // Appears in Redux DevTools dropdown
-      // Optional: filter noisy actions
-      // actionsDenylist: ['internal/*'],
-      // enabled: process.env.NODE_ENV === 'development', // Disable in prod
+      name: 'AuthStore',
     }
   )
 );

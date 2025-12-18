@@ -51,6 +51,7 @@ export const login = async (req: Request, res: Response) => {
   await RefreshToken.deleteMany({ userId: user._id });
 
   const refreshToken = generateRefreshToken(user._id.toString());
+  const accessToken = generateAccessToken(user._id.toString());
   await RefreshToken.create({
     token: refreshToken,
     userId: user._id,
@@ -62,7 +63,7 @@ export const login = async (req: Request, res: Response) => {
   res.json({
     message: "Logged in successfully",
     user: { id: user._id, name: user.name, email: user.email },
-    accessToken: generateAccessToken(user._id.toString()), // optional: send it too
+    accessToken: accessToken,
   });
 };
 

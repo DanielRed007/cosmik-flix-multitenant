@@ -1,20 +1,20 @@
-export interface User {
+export interface SessionUser {
   id: string;
-  name: string;
+  name?: string;
   email: string;
 }
 
 export interface AuthState {
   accessToken: string | null;
-  user: User | null;
+  user: SessionUser | null;
   isAuthenticated: boolean;
 
-  login: (accessToken: string, user: User) => void;
+  login: (accessToken: string, user: SessionUser) => void;
   logout: () => void;
   setAccessToken: (accessToken: string) => void;
 }
 
 export interface LoginResponse {
   accessToken: string;
-  user: User;
+  user: SessionUser;
 }

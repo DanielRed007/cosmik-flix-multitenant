@@ -1,10 +1,6 @@
 // lib/auth.ts
 import { cookies } from 'next/headers';
-import { jwtVerify } from 'jose';
-
-// Your JWT secret (use a strong one in production!)
-const JWT_SECRET = new TextEncoder().encode(process.env.JWT_ACCESS_SECRET!);
-const REFRESH_SECRET = new TextEncoder().encode(process.env.JWT_REFRESH_SECRET!);
+import jwt from 'jsonwebtoken';
 
 // Types
 export interface SessionUser {
@@ -14,18 +10,23 @@ export interface SessionUser {
   // Add any other fields you include in your JWT payload
 }
 
-export interface Session {
-  user: SessionUser;
-  accessToken?: string; // Optional: fresh token if refreshed
-}
+export type Session = {
+  user: {
+    id: string;
+    name?: string;
+    email: string;
+    // add other fields if needed
+  };
+  accessToken?: string;
+} | null;
 
 /**
  * Verifies a JWT token using jose (fast, modern, no subdependencies)
  */
-async function verifyToken(token: string, secret: Uint8Array) {
+async function verifyToken(token: string, secret: string) {
   try {
-    const { payload } = await jwtVerify(token, secret);
-    return payload;
+    const decoded = await jwt.verify(token, secret); ;
+    return decoded;
   } catch {
     return null;
   }
@@ -38,11 +39,10 @@ async function verifyToken(token: string, secret: Uint8Array) {
  */
 export async function getServerSession() {
   const refreshToken = (await cookies()).get('refreshToken')?.value;
-
   if (!refreshToken) return null;
 
   // Verify refresh token
-  const refreshPayload = await verifyToken(refreshToken, REFRESH_SECRET);
+  const refreshPayload = await verifyToken(refreshToken, process.env.JWT_REFRESH_SECRET!);
   if (!refreshPayload) return null;
 
   // Refresh logic (internal fetch – use relative URL)
@@ -52,11 +52,14 @@ export async function getServerSession() {
       credentials: 'include',
     });
 
-    if (!res.ok) return null;
+    if (!res.ok) {
+      console.log('Refresh failed:', res.status, await res.text());
+      return null;
+    }
 
     const { accessToken } = await res.json();
 
-    const user = await verifyToken(accessToken, JWT_SECRET);
+    const user = await verifyToken(refreshToken, process.env.JWT_REFRESH_SECRET!);
     if (!user) return null;
 
     return { user, accessToken };
