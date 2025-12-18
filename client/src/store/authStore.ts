@@ -15,8 +15,8 @@ export const useAuthStore = create<AuthState>()(
       login: (accessToken: string, user: User) =>
         set(
           { accessToken, user, isAuthenticated: true },
-          false, // replace state
-          'auth/login' // Action name shown in DevTools
+          false,
+          'dashboard'
         ),
 
       logout: () =>

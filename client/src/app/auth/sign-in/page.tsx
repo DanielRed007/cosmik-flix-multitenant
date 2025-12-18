@@ -1,4 +1,3 @@
-// app/(auth)/login/page.tsx
 'use client';
 
 import { useState } from 'react';
@@ -65,7 +64,7 @@ export default function LoginPage() {
         });
         
         useAuthStore.getState().login(data.accessToken, data.user);
-
+        
         setTimeout(() => router.push('/dashboard'), 1500);
       } else {
         toast.error(data.message || 'Invalid credentials. Please try again.');

@@ -9,10 +9,9 @@ export async function proxy(req: NextRequest) {
   const path = req.nextUrl.pathname;
 
   if (protectedPaths.some(p => path.startsWith(p))) {
-    const session = await getServerSession(req); // Verify httpOnly cookie or JWT
-
+    const session = await getServerSession(); // Verify httpOnly cookie or JWT
     if (!session) {
-      const url = new URL('/login', req.url);
+      const url = new URL('/dashboard', req.url);
       url.searchParams.set('callbackUrl', path); // Optional: redirect back after login
       return NextResponse.redirect(url);
     }
