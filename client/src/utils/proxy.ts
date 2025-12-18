@@ -1,18 +1,17 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { getServerSession } from './auth';
- // Your function to verify session/JWT from cookie
 
-const protectedPaths = ['/dashboard', '/profile'];
+const protectedPaths = ['/dashboard', '/profile', '/me'];
 
 export async function proxy(req: NextRequest) {
   const path = req.nextUrl.pathname;
 
   if (protectedPaths.some(p => path.startsWith(p))) {
-    const session = await getServerSession(); // Verify httpOnly cookie or JWT
+    const session = await getServerSession();
     if (!session) {
       const url = new URL('/dashboard', req.url);
-      url.searchParams.set('callbackUrl', path); // Optional: redirect back after login
+      url.searchParams.set('callbackUrl', path);
       return NextResponse.redirect(url);
     }
   }
