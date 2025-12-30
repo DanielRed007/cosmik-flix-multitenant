@@ -10,6 +10,7 @@ const options = {
     },
     servers: [
       { url: 'http://localhost:5000/api/auth', description: 'Authentication' },
+      { url: 'http://localhost:5000/api/profile', description: 'Profile' },
     ],
     components: {
       securitySchemes: {

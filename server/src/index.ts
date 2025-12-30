@@ -3,6 +3,7 @@ import cors from 'cors'
 import dotenv from 'dotenv'
 import cookieParser from 'cookie-parser'
 import authRoutes from './routes/auth.routes'
+import profileRoutes from './routes/profile.routes'
 import connectDB from './config/db'
 import swaggerUi from 'swagger-ui-express';
 import { swaggerSpec } from './swagger'; 
@@ -33,7 +34,8 @@ app.get('/api-spec', (req, res) => {
   res.send(swaggerSpec);
 });
 
-app.use("/api/auth", authRoutes)
+app.use("/api/auth", authRoutes);
+app.use("/api/profile", profileRoutes)
 
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`)

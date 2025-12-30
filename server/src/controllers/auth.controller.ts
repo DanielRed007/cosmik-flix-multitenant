@@ -4,6 +4,7 @@ import bcrypt from "bcryptjs";
 import User from "../models/User.model";
 import RefreshToken from "../models/RefreshToken.model";
 import { generateAccessToken, generateRefreshToken } from "../utils/generateTokens";
+import Profile from "../models/Profile.model";
 
 const setRefreshCookie = (res: Response, token: string) => {
   res.cookie("refreshToken", token, {
@@ -17,25 +18,30 @@ const setRefreshCookie = (res: Response, token: string) => {
 export const register = async (req: Request, res: Response) => {
   const { name, email, password } = req.body;
 
-  const existingUser = await User.findOne({ email });
-  if (existingUser) return res.status(400).json({ message: "User already exists" });
+  try {
+    const existingUser = await User.findOne({ email });
+    if (existingUser) return res.status(400).json({ message: "User already exists" });
 
-  const hashedPassword = await bcrypt.hash(password, 12);
-  const user = await User.create({ name, email, password: hashedPassword });
+    const hashedPassword = await bcrypt.hash(password, 12);
+    const user = await User.create({ name, email, password: hashedPassword });
+    const refreshToken = generateRefreshToken(user._id.toString());
+    await Profile.create({_id: user._id,name, email});
 
-  const refreshToken = generateRefreshToken(user._id.toString());
-  await RefreshToken.create({
-    token: refreshToken,
-    userId: user._id,
-    expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
-  });
+    await RefreshToken.create({
+      token: refreshToken,
+      userId: user._id,
+      expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+    });
 
-  setRefreshCookie(res, refreshToken);
+    setRefreshCookie(res, refreshToken);
 
-  res.status(201).json({
-    message: "User registered successfully",
-    user: { id: user._id, name: user.name, email: user.email },
-  });
+    res.status(201).json({
+      message: "User registered successfully",
+      user: { id: user._id, name: user.name, email: user.email },
+    });
+  } catch (error) {
+    
+  }
 };
 
 export const login = async (req: Request, res: Response) => {

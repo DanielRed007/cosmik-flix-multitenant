@@ -21,6 +21,7 @@ export function AppSidebar() {
       <SidebarContent>
         <h1>Navigatiion</h1>
           <SidebarMenu>
+            
             <SidebarMenuItem>
               <SidebarMenuButton asChild>
                 <a href="/dashboard">
@@ -30,23 +31,6 @@ export function AppSidebar() {
               </SidebarMenuButton>
             </SidebarMenuItem>
 
-            <SidebarMenuItem>
-              <SidebarMenuButton asChild>
-                <a href="/analytics">
-                  <BarChart className="mr-2 h-4 w-4" />
-                  <span>Analytics</span>
-                </a>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-
-            <SidebarMenuItem>
-              <SidebarMenuButton asChild>
-                <a href="/settings">
-                  <Settings className="mr-2 h-4 w-4" />
-                  <span>Settings</span>
-                </a>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
           </SidebarMenu>
       </SidebarContent>
 
