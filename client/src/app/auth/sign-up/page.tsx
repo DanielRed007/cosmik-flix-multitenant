@@ -48,7 +48,7 @@ export default function SignUpPage() {
         toast.success('Account created successfully!', {
           description: 'Redirecting to login...',
         });
-        setTimeout(() => router.push('/sign-in'), 1500);
+        setTimeout(() => router.push('/auth/sign-in'), 1500);
       } else {
         toast.error(data.message || 'Something went wrong. Please try again.');
       }
