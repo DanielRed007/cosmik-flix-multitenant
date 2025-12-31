@@ -4,16 +4,18 @@ import dotenv from 'dotenv'
 import cookieParser from 'cookie-parser'
 import authRoutes from './routes/auth.routes'
 import profileRoutes from './routes/profile.routes'
+import dashboardRoutes from './routes/dashboard.routes'
 import connectDB from './config/db'
 import swaggerUi from 'swagger-ui-express';
 import { swaggerSpec } from './swagger'; 
+import { gracefulShutdown } from './config/utils/error-helpers'
 
-dotenv.config()
+dotenv.config();
 
 const app = express()
 const PORT = process.env.PORT || 5000
 
-connectDB()
+connectDB();
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
@@ -36,7 +38,24 @@ app.get('/api-spec', (req, res) => {
 
 app.use("/api/auth", authRoutes);
 app.use("/api/profile", profileRoutes)
+app.use("/api/dashboard", dashboardRoutes)
 
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`)
 })
+
+// Listen for termination signals
+process.on('SIGINT', gracefulShutdown);
+process.on('SIGTERM', gracefulShutdown);
+process.on('SIGUSR2', gracefulShutdown);
+
+// Optional: handle uncaught errors to avoid zombie processes
+process.on('uncaughtException', (err) => {
+  console.error('Uncaught Exception:', err);
+  gracefulShutdown();
+});
+
+process.on('unhandledRejection', (err) => {
+  console.error('Unhandled Rejection:', err);
+  gracefulShutdown();
+});
