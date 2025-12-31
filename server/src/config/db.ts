@@ -1,12 +1,12 @@
 import mongoose from "mongoose";
 
 
-const connectDB = () => {
+const connectDB = async () => {
   try {
-    mongoose.connect(process.env.MONGO_URI!);
+    await mongoose.connect(process.env.MONGO_URI!);
     console.log("MongoDB connected → cosmik DB 🔥");
   } catch (err) {
-    console.error(err);
+    console.error("MongoDB connection error:", err);
     process.exit(1);
   }
 };

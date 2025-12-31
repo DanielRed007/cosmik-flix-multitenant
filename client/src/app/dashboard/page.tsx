@@ -19,7 +19,27 @@ export default function Dashboard() {
     if (!isAuthenticated) {
       router.push('/auth/sign-in');
     }
+
+    getMovies()
   }, [isAuthenticated, router]);
+
+  const getMovies = async() => {
+      const res = await fetch('/api/dashboard', {
+          method: 'GET',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+        });
+
+        const data = await res.json();
+
+        if (res.ok) {
+          console.log({data})
+          
+          useAuthStore.getState().login(data.accessToken, data.user);
+          
+          setTimeout(() => router.push('/dashboard'), 1500);
+    }
+  }
 
   if (!isAuthenticated) {
     return <p>Redirecting to login...</p>; // or a loader
