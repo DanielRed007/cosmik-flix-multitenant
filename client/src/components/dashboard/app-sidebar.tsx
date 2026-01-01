@@ -15,11 +15,10 @@ export function AppSidebar() {
   return (
     <Sidebar>
       <SidebarHeader className="h-16 border-b flex items-center px-6">
-        <h2 className="text-xl font-bold">MyApp</h2>
+        <h2 className="text-xl font-bold">Cosmik</h2>
       </SidebarHeader>
 
       <SidebarContent>
-        <h1>Navigatiion</h1>
           <SidebarMenu>
             
             <SidebarMenuItem>
