@@ -2,6 +2,9 @@
 
 import { useAuthStore } from '@/store/authStore';
 import { useEffect, useState } from 'react';
+import { Loader2 } from "lucide-react";
+import { cn } from "@/lib/utils";
+import Loading from '../ui/loading';
 
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
@@ -31,7 +34,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     checkSession();
   }, [login, logout]);
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <Loading />;
 
   return <>{children}</>;
 }
