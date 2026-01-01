@@ -13,28 +13,18 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { apiFetch } from '../../../utils/api';
 import { useAuthStore } from '../../../store/authStore';
-import { LoginResponse } from '../../../types/auth';
 import { Loader2, Eye, EyeOff } from 'lucide-react';
 import { toast } from 'sonner';
-
-// const handleLogout = async () => {
-//   try {
-//     await apiFetch('/logout', { method: 'POST' });
-//   } catch {
-//     // Proceed anyway
-//   } finally {
-//     useAuthStore.getState().logout();
-//     navigate('/login');
-//   }
-// };
+import { useProfileStore } from '@/store/profileStore';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const { isAuthenticated, loginUser } = useAuthStore();
+
 
   const router = useRouter();
 
@@ -49,25 +39,17 @@ export default function LoginPage() {
     setIsLoading(true);
 
     try {
-      const res = await fetch('/api/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: email.trim(), password }),
-        credentials: 'include', // Important: sends & receives cookies (refreshToken)
-      });
+      loginUser(email.trim(),password);
 
-      const data = await res.json();
-
-      if (res.ok) {
+      if (isAuthenticated) {
         toast.success('Welcome back!', {
           description: 'Redirecting to dashboard...',
         });
         
-        useAuthStore.getState().login(data.accessToken, data.user);
-        
         setTimeout(() => router.push('/dashboard'), 1500);
+        
       } else {
-        toast.error(data.message || 'Invalid credentials. Please try again.');
+        toast.error('Invalid credentials. Please try again.');
       }
     } catch (error) {
       toast.error('Network error. Please check your connection and try again.');
