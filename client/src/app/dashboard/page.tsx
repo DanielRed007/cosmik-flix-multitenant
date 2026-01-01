@@ -12,9 +12,11 @@ import {
 } from "@/components/ui/card";
 import { MovieCardThumbnail } from '@/components/cosmik/movie-card-thumbnail';
 import { Movie } from '@/types/movie';
+import { useProfileStore } from '@/store/profileStore';
 
 export default function Dashboard() {
   const { isAuthenticated, user } = useAuthStore();
+  const { getProfile } = useProfileStore();
   const router = useRouter();
   const [movieList, setMovieList] = useState<Movie[]>([]); 
 
@@ -23,6 +25,7 @@ export default function Dashboard() {
       router.push('/auth/sign-in');
     }
 
+    getProfile();
     getMovies();
   }, [isAuthenticated, router]);
 

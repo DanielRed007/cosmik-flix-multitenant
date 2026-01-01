@@ -3,6 +3,7 @@
 "use client";
 
 import { useAuthStore } from "@/store/authStore";
+import { useProfileStore } from "@/store/profileStore";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -49,12 +50,13 @@ type Genre = typeof ALL_GENRES[number];
 const profileSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
   email: z.string().email("Invalid email address"),
-  city: z.string(),
-  zipCode: z.string().min(3, "Zip code is too short").max(20),
+  city: z.string().optional(),
+  zipCode: z.string().optional(),
   age: z
     .number()
-    .min(13, "You must be at least 13 years old")
-    .max(120, "Age seems too high"),
+    .min(13, "You must be at least 13")
+    .max(120, "Age seems too high")
+    .optional(),
   favoriteGenres: z.array(z.string()),
 });
 
@@ -62,14 +64,15 @@ type ProfileFormValues = z.infer<typeof profileSchema>;
 
 export default function ProfilePage() {
   const { isAuthenticated, user } = useAuthStore();
-  const [isLoading, setIsLoading] = useState(true);
+  const { profile, getProfile } = useProfileStore();
+
   const [isEditing, setIsEditing] = useState(false);
 
-  const form = useForm<ProfileFormValues>({
+  const form = useForm<any>({
     resolver: zodResolver(profileSchema),
     defaultValues: {
-      name: user?.name || "",
-      email: user?.email || "",
+      name: "",
+      email: "",
       city: "",
       zipCode: "",
       age: undefined,
@@ -77,70 +80,55 @@ export default function ProfilePage() {
     },
   });
 
+  // Fetch profile on mount (only if authenticated)
   useEffect(() => {
-    const fetchProfile = async () => {
-      if (!isAuthenticated) return;
-
-      try {
-        setIsLoading(true);
-
-        const res = await fetch("/api/profile", {
-          method: "GET",
-          headers: { "Content-Type": "application/json" },
-        });
-
-        if (!res.ok) throw new Error("Failed to fetch profile");
-
-        const data = await res.json();
-        console.log("Fetched profile:", data);
-
-        // Populate form with data from API (your "always populated" profile)
-        form.reset({
-          name: data.profile?.name || "",
-          email: data.profile?.email || "",
-          city: data.profile?.city || "",
-          zipCode: data.profile?.zipCode || "",
-          age: data.profile?.age ?? undefined,
-          favoriteGenres: data.profile?.favoriteGenres || []
-        });
-      } catch (error) {
-        console.error("Profile fetch error:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    // Ensure form fields are registered before resetting
-    if (form.control) {
-      fetchProfile();
+    if (isAuthenticated && !profile) {
+      getProfile();
     }
-  }, [isAuthenticated, form.control]);
+  }, [isAuthenticated, profile, getProfile]);
+
+  // Populate form when profile data becomes available
+  useEffect(() => {
+    if (profile) {
+      form.reset({
+        name: profile.name || user?.name || "",
+        email: profile.email || user?.email || "",
+        city: profile.city || "",
+        zipCode: profile.zipCode || "",
+        age: profile.age || undefined,
+        favoriteGenres: profile.favoriteGenres || [],
+      });
+    }
+  }, [profile, user, form]);
 
   const onSubmit = async (values: ProfileFormValues) => {
-    console.log("Submitting:", values);
-
     try {
       const res = await fetch("/api/profile", {
-        method: "PATCH", // ← now using PATCH
+        method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          ...values,
-        }),
+        body: JSON.stringify(values),
       });
 
-      if (!res.ok) throw new Error("Update failed");
+      if (!res.ok) {
+        const error = await res.json();
+        throw new Error(error.message || "Update failed");
+      }
 
-      const data = await res.json();
-      console.log("Updated profile:", data);
+      const updatedProfile = await res.json();
+      console.log("Profile updated:", updatedProfile);
 
-      // Optional: refetch or update local state
+      // Optionally update store if needed
+      // updateProfile(updatedProfile);
+
       setIsEditing(false);
+      // You could show a toast success here
     } catch (error) {
-      console.error(error);
-      // toast error here
+      console.error("Profile update error:", error);
+      // Show toast error
     }
   };
 
+  // Show auth guard
   if (!isAuthenticated) {
     return (
       <div className="flex items-center justify-center min-h-screen">
@@ -149,7 +137,8 @@ export default function ProfilePage() {
     );
   }
 
-  if (isLoading) {
+  // Show loading while fetching profile
+  if ((!profile && isAuthenticated)) {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <p className="text-lg">Loading your profile...</p>
@@ -162,44 +151,41 @@ export default function ProfilePage() {
       <Card>
         <CardHeader>
           <CardTitle>Your Profile</CardTitle>
-          <CardDescription>Manage your personal information</CardDescription>
+          <CardDescription>Manage your personal information and preferences</CardDescription>
         </CardHeader>
         <CardContent>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-              <FormField
-                control={form.control}
-                name="name"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Name</FormLabel>
-                    <FormControl>
-                      <Input placeholder="John Doe(Test User)" disabled={!isEditing} {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <FormField
+                  control={form.control}
+                  name="name"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Name</FormLabel>
+                      <FormControl>
+                        <Input disabled={!isEditing} {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
-              <FormField
-                control={form.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Email</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="email"
-                        placeholder={field.value}
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Email</FormLabel>
+                      <FormControl>
+                        <Input type="email" disabled {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
 
-              {/* NEW ROW: City, Zip Code, Age */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <FormField
                   control={form.control}
@@ -208,7 +194,7 @@ export default function ProfilePage() {
                     <FormItem>
                       <FormLabel>City</FormLabel>
                       <FormControl>
-                        <Input placeholder="New York" disabled={!isEditing} {...field} />
+                        <Input disabled={!isEditing} {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -222,7 +208,7 @@ export default function ProfilePage() {
                     <FormItem>
                       <FormLabel>Zip Code</FormLabel>
                       <FormControl>
-                        <Input placeholder="10001" disabled={!isEditing} {...field} />
+                        <Input disabled={!isEditing} {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -238,10 +224,12 @@ export default function ProfilePage() {
                       <FormControl>
                         <Input
                           type="number"
-                          placeholder="30"
                           disabled={!isEditing}
                           {...field}
-                          onChange={(e) => field.onChange(e.target.value ? Number(e.target.value) : undefined)}
+                          value={field.value ?? ""}
+                          onChange={(e) =>
+                            field.onChange(e.target.value ? Number(e.target.value) : undefined)
+                          }
                         />
                       </FormControl>
                       <FormMessage />
@@ -250,7 +238,6 @@ export default function ProfilePage() {
                 />
               </div>
 
-              {/* Movie Genres Section */}
               <FormField
                 control={form.control}
                 name="favoriteGenres"
@@ -261,25 +248,26 @@ export default function ProfilePage() {
                       <div className="flex flex-wrap gap-2 mt-2">
                         {ALL_GENRES.map((genre) => {
                           const isSelected = field.value.includes(genre);
-
                           return (
                             <Badge
                               key={genre}
                               variant={isSelected ? "default" : "outline"}
                               className={`
-                                cursor-pointer transition-all 
-                                hover:scale-105 
+                                cursor-pointer transition-all hover:scale-105
                                 ${isSelected ? "ring-2 ring-offset-2 ring-primary" : ""}
+                                ${!isEditing ? "cursor-not-allowed opacity-70" : ""}
                               `}
-                              onClick={() => {
-                                if (isSelected) {
-                                  // Remove genre
-                                  field.onChange(field.value.filter((g) => g !== genre));
-                                } else {
-                                  // Add genre
-                                  field.onChange([...field.value, genre]);
-                                }
-                              }}
+                              onClick={
+                                isEditing
+                                  ? () => {
+                                      if (isSelected) {
+                                        field.onChange(field.value.filter((g: any) => g !== genre));
+                                      } else {
+                                        field.onChange([...field.value, genre]);
+                                      }
+                                    }
+                                  : undefined
+                              }
                             >
                               {genre}
                             </Badge>
@@ -292,10 +280,12 @@ export default function ProfilePage() {
                 )}
               />
 
-              <div className="flex gap-3">
+              <div className="flex gap-3 pt-4">
                 {isEditing ? (
                   <>
-                    <Button type="submit">Save Changes</Button>
+                    <Button type="submit" disabled={form.formState.isSubmitting}>
+                      {form.formState.isSubmitting ? "Saving..." : "Save Changes"}
+                    </Button>
                     <Button
                       type="button"
                       variant="outline"

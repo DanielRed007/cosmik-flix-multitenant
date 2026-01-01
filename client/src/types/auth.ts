@@ -9,6 +9,7 @@ export interface AuthState {
   user: SessionUser | null;
   isAuthenticated: boolean;
 
+  loginUser: (email: string, password: string) => void;
   login: (accessToken: string, user: SessionUser) => void;
   logout: () => void;
   setAccessToken: (accessToken: string) => void;
