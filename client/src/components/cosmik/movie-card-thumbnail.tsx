@@ -39,14 +39,14 @@ export function MovieCardThumbnail({ movie }: { movie: Movie }) {
         )}
       </div>
 
-      <CardHeader className="pb-1">
-        <CardTitle className="line-clamp-2 text-md">{title}</CardTitle>
+      <CardHeader className="">
+        <CardTitle className="text-md p-0 m-0">{title}</CardTitle>
         <CardDescription className="text-base font-medium">
           {year} {runtime && <span className="text-muted-foreground">• {runtime} min</span>}
         </CardDescription>
       </CardHeader>
 
-      <CardContent className="pb-1">
+      <CardContent className="">
         <div className="flex flex-wrap gap-1">
           {genres.map((genre) => (
             <Badge key={genre} variant="secondary">
@@ -57,7 +57,7 @@ export function MovieCardThumbnail({ movie }: { movie: Movie }) {
       </CardContent>
 
       <CardFooter className="pt-0">
-        <div className="flex items-center gap-1 text-sm font-medium">
+        <div className="flex items-center text-sm font-medium">
           <Star className="size-4 fill-primary text-primary" />
           <span>{rating.toFixed(1)}</span>
           <span className="text-muted-foreground">IMDb</span>

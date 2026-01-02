@@ -3,7 +3,6 @@ import { BBH_Sans_Bartle, DM_Sans } from "next/font/google";
 import { Toaster } from "@/components/ui/sonner";
 import "./globals.css";
 import { getServerSession } from "@/utils/auth";
-import { SessionProvider } from "@/components/auth/sessionProvider";
 import { AuthProvider } from "@/components/auth/authProvider";
 
 const dmSans = DM_Sans({

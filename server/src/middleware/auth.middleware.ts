@@ -36,6 +36,7 @@ export const authMiddleware = async (req: Request, res: Response, next: NextFunc
     });
   }
 
+  (req as any).user = user;
   next();
   } catch (err: any) {
     console.error('❌ JWT Verify Error:', err.message);

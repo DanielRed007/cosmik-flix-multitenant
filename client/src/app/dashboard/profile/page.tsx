@@ -164,7 +164,7 @@ export default function ProfilePage() {
                     <FormItem>
                       <FormLabel>Name</FormLabel>
                       <FormControl>
-                        <Input disabled={!isEditing} {...field} />
+                        <Input disabled={false} {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -194,7 +194,7 @@ export default function ProfilePage() {
                     <FormItem>
                       <FormLabel>City</FormLabel>
                       <FormControl>
-                        <Input disabled={!isEditing} {...field} />
+                        <Input disabled={false} {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -208,7 +208,7 @@ export default function ProfilePage() {
                     <FormItem>
                       <FormLabel>Zip Code</FormLabel>
                       <FormControl>
-                        <Input disabled={!isEditing} {...field} />
+                        <Input disabled={false} {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -224,7 +224,7 @@ export default function ProfilePage() {
                       <FormControl>
                         <Input
                           type="number"
-                          disabled={!isEditing}
+                          // disabled={!isEditing}
                           {...field}
                           value={field.value ?? ""}
                           onChange={(e) =>
@@ -283,7 +283,7 @@ export default function ProfilePage() {
               <div className="flex gap-3 pt-4">
                 {isEditing ? (
                   <>
-                    <Button type="submit" disabled={form.formState.isSubmitting}>
+                    <Button type="submit" disabled={false}>
                       {form.formState.isSubmitting ? "Saving..." : "Save Changes"}
                     </Button>
                     <Button
