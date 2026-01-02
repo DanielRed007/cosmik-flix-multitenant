@@ -55,10 +55,10 @@ export default function Dashboard() {
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
       {/* Left: Recent Movies */}
       <Card className="lg:col-span-2 h-full min-h-80">
-        <CardHeader className="pb-3">
-          <CardTitle className="text-lg">Recent / Featured Movies</CardTitle>
+        <CardHeader className="pb-0">
+          <CardTitle className="text-4xl">Featured</CardTitle>
           <CardDescription className="text-sm">
-            Notable or recently viewed titles
+            Latests Trends
           </CardDescription>
         </CardHeader>
         <CardContent className="pt-0 h-full">
