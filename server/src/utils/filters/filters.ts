@@ -7,6 +7,7 @@ export const thumbnailMovieFilters = (movieList : Movie[]) => {
         .filter((movie) => movie.poster)
         .map((movie) => {
             return {
+                id: movie._id,
                 title: movie.title,
                 year: movie.year,
                 poster:movie.poster,

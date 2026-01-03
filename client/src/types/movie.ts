@@ -1,5 +1,6 @@
 
 export interface Movie {
+  _id: string;
   title: string;
   year: number;
   poster?: string | null;
@@ -10,3 +11,9 @@ export interface Movie {
     votes: number;
   };
 };
+
+export interface MoviesState {
+  movies: any;
+
+  getMovies: () => any;
+}

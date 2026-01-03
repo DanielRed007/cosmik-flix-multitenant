@@ -1,15 +1,13 @@
 import {
   Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
   CardTitle,
+  CardDescription,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Star } from "lucide-react";
+import { Star, Plus, Check } from "lucide-react";
 import Image from "next/image";
 import { Movie } from "@/types/movie";
+import { useState } from "react";
 
 export function MovieCardThumbnail({ movie }: { movie: Movie }) {
   const {
@@ -21,48 +19,87 @@ export function MovieCardThumbnail({ movie }: { movie: Movie }) {
     imdb: { rating },
   } = movie;
 
+  // Local state to track if this movie is "added"
+  const [isAdded, setIsAdded] = useState(false);
+
   return (
-    <Card className="overflow-hidden transition-shadow hover:shadow-lg">
+    <Card className="overflow-hidden transition-shadow hover:shadow-2xl p-0 border-0 rounded-none group relative">
       <div className="relative aspect-[2/3] bg-muted">
         {poster ? (
           <Image
             src={poster}
             alt={`Poster for ${title}`}
             fill
-            className="object-cover"
-            unoptimized // For external URLs like media-amazon.com
+            className="object-cover transition-transform duration-500 group-hover:scale-110"
+            unoptimized
           />
         ) : (
           <div className="flex h-full items-center justify-center bg-muted text-muted-foreground">
             No poster
           </div>
         )}
+
+        {/* Add Button - Top Right */}
+        <button
+          onClick={(e) => {
+            e.stopPropagation(); // Prevent triggering parent clicks if any
+            setIsAdded(!isAdded);
+            console.log(movie)
+          }}
+          className="absolute top-2 right-2 z-10 flex size-9 items-center justify-center rounded-full bg-black/50 backdrop-blur-sm text-white transition-all hover:bg-black/70 hover:scale-110"
+          aria-label={isAdded ? "Remove from list" : "Add to list"}
+        >
+          <div className="relative size-5">
+            {/* Plus icon */}
+            <Plus
+              className={`absolute inset-0 size-5 transition-all duration-300 ${
+                isAdded
+                  ? "scale-0 rotate-90 opacity-0"
+                  : "scale-100 rotate-0 opacity-100"
+              }`}
+            />
+            {/* Check icon */}
+            <Check
+              className={`absolute inset-0 size-5 text-green-400 transition-all duration-300 ${
+                isAdded
+                  ? "scale-100 rotate-0 opacity-100"
+                  : "scale-0 -rotate-90 opacity-0"
+              }`}
+            />
+          </div>
+        </button>
+
+        {/* Overlay - appears on hover */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-black/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
+          <div className="absolute inset-x-0 bottom-0 translate-y-4 group-hover:translate-y-0 transition-transform duration-300 pb-4 px-3">
+            <CardTitle className="text-base leading-tight text-white drop-shadow-lg line-clamp-2">
+              {title}
+            </CardTitle>
+            <CardDescription className="text-sm font-medium text-white/90 drop-shadow-md mt-1">
+              {year}
+              {runtime && <span> • {runtime} min</span>}
+            </CardDescription>
+
+            <div className="flex flex-wrap gap-1.5 mt-2.5">
+              {genres.map((genre) => (
+                <Badge
+                  key={genre}
+                  variant="secondary"
+                  className="text-xs py-0.5 bg-white/20 text-white border-white/30 backdrop-blur-sm"
+                >
+                  {genre}
+                </Badge>
+              ))}
+            </div>
+
+            <div className="flex items-center text-sm font-medium mt-3 text-white drop-shadow-md">
+              <Star className="size-4 fill-yellow-400 text-yellow-400 mr-1" />
+              <span>{rating.toFixed(1)}</span>
+              <span className="ml-1 text-white/80">IMDb</span>
+            </div>
+          </div>
+        </div>
       </div>
-
-      <CardHeader className="">
-        <CardTitle className="text-md p-0 m-0">{title}</CardTitle>
-        <CardDescription className="text-base font-medium">
-          {year} {runtime && <span className="text-muted-foreground">• {runtime} min</span>}
-        </CardDescription>
-      </CardHeader>
-
-      <CardContent className="">
-        <div className="flex flex-wrap gap-1">
-          {genres.map((genre) => (
-            <Badge key={genre} variant="secondary">
-              {genre}
-            </Badge>
-          ))}
-        </div>
-      </CardContent>
-
-      <CardFooter className="pt-0">
-        <div className="flex items-center text-sm font-medium">
-          <Star className="size-4 fill-primary text-primary" />
-          <span>{rating.toFixed(1)}</span>
-          <span className="text-muted-foreground">IMDb</span>
-        </div>
-      </CardFooter>
     </Card>
   );
 }
