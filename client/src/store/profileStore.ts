@@ -19,8 +19,6 @@ export const useProfileStore = create<ProfileState>()(
 
         const data = await res.json();
 
-        console.log(res, "RXXX!")
-
         set({ profile: data})
       },
     }),

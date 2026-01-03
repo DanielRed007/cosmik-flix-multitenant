@@ -1,5 +1,7 @@
+import { ObjectId } from "mongoose";
 
 export interface Movie {
+  _id: ObjectId;
   title: string;
   year: number;
   poster?: string | null;
