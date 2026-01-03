@@ -2,6 +2,7 @@
 import { Request, Response } from "express";
 import Profile from "../models/Profile.model";
 import User from "../models/User.model";
+import { mapProfileResponse } from "../utils/filters/filters";
 
 export const getMyProfile = async (req: Request, res: Response) => {
   const { email } = req.body;
@@ -23,12 +24,11 @@ export const getMyProfile = async (req: Request, res: Response) => {
 
 };
 
-// PATCH /api/profile - Update authenticated user's profile (partial update)
+// PATCH /api/profile --
 export const updateMyProfile = async (req: Request, res: Response) => {
   try {
     // In the future: get email from authenticated user (JWT middleware)
-    // For now: temporarily using email from body (same as your getMyProfile)
-    const { email, name, city, zipCode, age, favoriteGenres } = req.body;
+    const { email, name, city, zipCode, age, favoriteGenres, favoriteMoviesList } = req.body;
 
     if (!email) {
       return res.status(400).json({ message: "Email is required" });
@@ -47,6 +47,7 @@ export const updateMyProfile = async (req: Request, res: Response) => {
     if (zipCode !== undefined) profile.zipCode = zipCode;
     if (age !== undefined) profile.age = age;
     if (Array.isArray(favoriteGenres)) profile.favoriteGenres = favoriteGenres;
+    if (Array.isArray(favoriteMoviesList)) profile.favoriteMoviesList = favoriteMoviesList;
 
     // Save updated profile
     await profile.save();
@@ -61,6 +62,7 @@ export const updateMyProfile = async (req: Request, res: Response) => {
         zipCode: profile.zipCode,
         age: profile.age,
         favoriteGenres: profile.favoriteGenres,
+        favoriteMoviesList: profile.favoriteMoviesList,
         createdAt: profile.createdAt,
         updatedAt: profile.updatedAt,
       },
@@ -70,3 +72,60 @@ export const updateMyProfile = async (req: Request, res: Response) => {
     res.status(500).json({ message: "Server error while updating profile" });
   }
 };
+
+export const updateMyMovieList = async (req: any, res: Response) => {
+  try {
+    const { movieId, action } = req.body as { movieId: string; action: "add" | "remove" };
+
+    if (!movieId || !action) {
+      return res.status(400).json({ message: "movieId and action are required" });
+    }
+
+    if (!["add", "remove"].includes(action)) {
+      return res.status(400).json({ message: "action must be 'add' or 'remove'" });
+    }
+
+    const email = req.user?.email;
+    if (!email) {
+      return res.status(401).json({ message: "Unauthorized: User not authenticated" });
+    }
+
+    const profile = await Profile.findOne({ email });
+    if (!profile) {
+      return res.status(404).json({ message: "Profile not found" });
+    }
+
+    if (!profile.favoriteMoviesList) {
+      profile.favoriteMoviesList = [];
+    }
+
+    if (action === "add") {
+      if (!profile.favoriteMoviesList.includes(movieId)) {
+        profile.favoriteMoviesList.push(movieId);
+      } else {
+        return res.status(200).json({
+          message: "Movie already in favorites",
+          profile: mapProfileResponse(profile),
+        });
+      }
+    } else if (action === "remove") {
+      profile.favoriteMoviesList = profile.favoriteMoviesList.filter(
+        (id) => id !== movieId
+      );
+    }
+
+    // Save updated profile
+    await profile.save();
+
+    // Send back clean profile data
+    return res.status(200).json({
+      message: "Favorites updated successfully",
+      profile: mapProfileResponse(profile),
+    });
+  } catch (error) {
+    console.error("Error updating movie list:", error);
+    return res.status(500).json({ message: "Server error while updating favorites" });
+  }
+};
+
+// Helper to avoid exposing sensitive fields

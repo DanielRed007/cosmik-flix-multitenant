@@ -7,7 +7,8 @@ import { Badge } from "@/components/ui/badge";
 import { Star, Plus, Check } from "lucide-react";
 import Image from "next/image";
 import { Movie } from "@/types/movie";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useProfileStore } from "@/store/profileStore";
 
 export function MovieCardThumbnail({ movie }: { movie: Movie }) {
   const {
@@ -17,10 +18,24 @@ export function MovieCardThumbnail({ movie }: { movie: Movie }) {
     genres,
     runtime,
     imdb: { rating },
+    id
   } = movie;
 
   // Local state to track if this movie is "added"
   const [isAdded, setIsAdded] = useState(false);
+  const [action, setAction] = useState("add")
+  const { profile ,updateMoviesList } = useProfileStore();
+
+  const includedOnMovieList = (movieId: string, profile: any) => profile.favoriteMoviesList?.includes(movieId) 
+
+  useEffect(() => {
+
+    if(includedOnMovieList(id, profile)){
+      setIsAdded(true)
+      setAction("remove")
+    }
+ 
+  },[setIsAdded, setAction])
 
   return (
     <Card className="overflow-hidden transition-shadow hover:shadow-2xl p-0 border-0 rounded-none group relative">
@@ -44,7 +59,7 @@ export function MovieCardThumbnail({ movie }: { movie: Movie }) {
           onClick={(e) => {
             e.stopPropagation(); // Prevent triggering parent clicks if any
             setIsAdded(!isAdded);
-            console.log(movie)
+            updateMoviesList(movie.id, action)
           }}
           className="absolute top-2 right-2 z-10 flex size-9 items-center justify-center rounded-full bg-black/50 backdrop-blur-sm text-white transition-all hover:bg-black/70 hover:scale-110"
           aria-label={isAdded ? "Remove from list" : "Add to list"}

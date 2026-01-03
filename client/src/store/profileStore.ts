@@ -6,7 +6,7 @@ import { ProfileState } from '@/types/profile';
 
 export const useProfileStore = create<ProfileState>()(
   devtools(
-    (set) => ({
+    (set, get) => ({
       profile: null,
 
       getProfile: async () => {
@@ -21,6 +21,48 @@ export const useProfileStore = create<ProfileState>()(
 
         set({ profile: data})
       },
+
+      updateMoviesList: async (movieId: string, action: 'add' | 'remove') => {
+        const currentProfile = get().profile;
+
+        if (!currentProfile) {
+          console.warn("No profile loaded yet");
+          return;
+        }
+
+        let updatedList = [...(currentProfile.favoriteMoviesList || [])];
+
+        if (action === 'add') {
+          if (!updatedList.includes(movieId)) {
+            updatedList.push(movieId);
+          }
+        } else if (action === 'remove') {
+          updatedList = updatedList.filter(id => id !== movieId);
+        }
+
+        set({
+          profile: {
+            ...currentProfile,
+            favoriteMoviesList: updatedList,
+          }
+        });
+
+        try {
+          const res = await fetch("/api/profile/my-list", {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ movieId, action }),
+          });
+
+          if (!res.ok) throw new Error("Failed to update list");
+
+          const updatedData = await res.json();
+          set({ profile: updatedData });
+        } catch (error) {
+          console.error(error);
+        }
+      },
+
     }),
     {
       name: 'ProfileStore',

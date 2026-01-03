@@ -20,3 +20,17 @@ export const thumbnailMovieFilters = (movieList : Movie[]) => {
             }
         })
 }
+
+export const mapProfileResponse = (profile: any) => {
+  return {
+    name: profile.name,
+    email: profile.email,
+    city: profile.city,
+    zipCode: profile.zipCode,
+    age: profile.age,
+    favoriteGenres: profile.favoriteGenres,
+    favoriteMoviesList: profile.favoriteMoviesList,
+    createdAt: profile.createdAt,
+    updatedAt: profile.updatedAt,
+  };
+}

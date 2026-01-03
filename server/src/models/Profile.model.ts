@@ -53,6 +53,10 @@ const profileSchema = new Schema(
         "Western",
       ], // Optional: restricts to valid genres (recommended!)
     },
+    favoriteMoviesList: {
+      type: [String], // Array of strings
+      default: [],    // Empty array if nothing selected
+    },
   },
   { timestamps: true }
 );
