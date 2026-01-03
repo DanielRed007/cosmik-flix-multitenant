@@ -20,12 +20,21 @@ export function AppSidebar() {
 
       <SidebarContent className="flex items-center px-6 bg-gradient-to-br from-lime-100 via-electric-green-600 to-lime-300">
           <SidebarMenu>
-            
+
             <SidebarMenuItem className="bg-electric-green mt-3 font-bold">
+              <SidebarMenuButton asChild>
+                <a href="/dashboard/search">
+                  <Home className="mr-2 h-4 w-4" />
+                  <span>Search</span>
+                </a>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+            
+            <SidebarMenuItem className="bg-electric-green mt-1 font-bold">
               <SidebarMenuButton asChild>
                 <a href="/dashboard">
                   <Home className="mr-2 h-4 w-4" />
-                  <span>Dashboard</span>
+                  <span>Featured</span>
                 </a>
               </SidebarMenuButton>
             </SidebarMenuItem>
