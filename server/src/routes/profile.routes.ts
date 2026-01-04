@@ -1,6 +1,6 @@
 // src/routes/profile.routes.ts
 import { Router } from "express";
-import { getMyProfile, updateMyMovieList, updateMyProfile } from "../controllers/profile.controller";
+import { getMyMovieList, getMyProfile, updateMyMovieList, updateMyProfile } from "../controllers/profile.controller";
 import { authMiddleware } from "../middleware/auth.middleware";
 
 const router = Router();
@@ -163,7 +163,7 @@ router.patch("/", authMiddleware ,updateMyProfile);
 
 /**
  * @openapi
- * /my-list:
+ * /update-my-list:
  *   patch:
  *     summary: Add or remove a movie from the user's favorite list
  *     description: Allows the authenticated user to add a movie to or remove a movie from their personal favorites list. The operation is idempotent — adding an already-present movie or removing a non-existent one will not cause an error.
@@ -299,6 +299,8 @@ router.patch("/", authMiddleware ,updateMyProfile);
  *                   example: "Server error while updating favorites"
  */
 
-router.patch("/my-list", authMiddleware ,updateMyMovieList);
+router.patch("/update-my-list", authMiddleware ,updateMyMovieList);
+
+router.post("/my-list", authMiddleware , getMyMovieList);
 
 export default router;
