@@ -48,7 +48,7 @@ export const useProfileStore = create<ProfileState>()(
         });
 
         try {
-          const res = await fetch("/api/profile/my-list", {
+          const res = await fetch("/api/profile/update-my-list", {
             method: "PATCH",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ movieId, action }),

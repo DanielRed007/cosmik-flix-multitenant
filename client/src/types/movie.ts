@@ -14,6 +14,8 @@ export interface Movie {
 
 export interface MoviesState {
   movies: any;
+  myList: any;
 
   getMovies: () => any;
+  getMoviesMyList: () => any;
 }

@@ -46,7 +46,7 @@ export default function Dashboard() {
         <CardContent className="pt-0 h-full">
           <div className="grid grid-cols-4 sm:grid-cols-4 md:grid-cols-4 xl:grid-cols-4 gap-3 auto-rows-fr h-full overflow-y-auto">
             {movies && movies?.map((movie: Movie) => (
-              <MovieCardThumbnail key={movie._id} movie={movie} />
+              <MovieCardThumbnail key={movie.id} movie={movie} />
             ))}
           </div>
 

@@ -3,11 +3,13 @@ import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
 import type {} from '@redux-devtools/extension'; // Important for TS support
 import { MoviesState } from '@/types/movie';
+import { useProfileStore } from './profileStore';
 
 export const useMoviesStore = create<MoviesState>()(
   devtools(
     (set) => ({
       movies: null,
+      myList: null,
 
       getMovies: async () => {
         
@@ -20,6 +22,23 @@ export const useMoviesStore = create<MoviesState>()(
         const data = await res.json();
 
         set({ movies: data})
+      },
+
+      getMoviesMyList: async () => {
+
+        await useProfileStore.getState().getProfile()
+        const currentMyList = useProfileStore.getState().profile.favoriteMoviesList;
+        
+        const res = await fetch('/api/profile/my-list', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ ids: currentMyList }),
+          credentials: 'include',
+        });
+
+        const data = await res.json();
+
+        set({ myList: data})
       },
     }),
     {

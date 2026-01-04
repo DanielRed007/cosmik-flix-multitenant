@@ -1,8 +1,10 @@
 // src/controllers/auth.controller.ts
 import { Request, Response } from "express";
 import Profile from "../models/Profile.model";
+import Movies from "../models/Movie.models"
 import User from "../models/User.model";
-import { mapProfileResponse } from "../utils/filters/filters";
+import { mapProfileResponse, thumbnailMovieFilters } from "../utils/filters/filters";
+import { Types } from "mongoose";
 
 export const getMyProfile = async (req: Request, res: Response) => {
   const { email } = req.body;
@@ -128,4 +130,53 @@ export const updateMyMovieList = async (req: any, res: Response) => {
   }
 };
 
-// Helper to avoid exposing sensitive fields
+export const getMyMovieList = async (req: any, res: Response) => {
+  const { ids } = req.body as { ids: string[] };
+
+  if (!Array.isArray(ids)) {
+    return Response.json({ error: "Invalid or empty ids" }, { status: 400 });
+  }
+
+  const objectIds = ids
+    .filter(id => Types.ObjectId.isValid(id)) // safety: only valid hex strings
+    .map(id => new Types.ObjectId(id));
+
+  if (objectIds.length === 0) {
+    return res.status(200).json([]); // no valid IDs → empty list
+  }
+
+  const recommendedMovies = await Movies.aggregate([
+      {
+        $match: {
+          _id: { $in: objectIds },
+        }
+      },
+
+      {
+          $sort: {
+          "imdb.rating": -1,
+          year: -1
+          }
+      },
+
+      {
+          $project: {
+          _id: 1,
+          stringId: 1,          
+          title: 1,
+          year: 1,
+          poster: 1,
+          genres: 1,
+          runtime: 1,
+          plot: 1,
+          "imdb.rating": 1,
+          "imdb.votes": 1,
+          genreMatchCount: 1
+          }
+      }
+    ]);
+
+    const movieThumbnails = thumbnailMovieFilters(recommendedMovies);
+
+    res.status(200).json(movieThumbnails);
+}
