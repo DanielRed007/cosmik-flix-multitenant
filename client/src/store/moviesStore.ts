@@ -10,6 +10,9 @@ export const useMoviesStore = create<MoviesState>()(
     (set) => ({
       movies: null,
       myList: null,
+      searchResults: null,
+
+      searchMovies: async () => {},
 
       getMovies: async () => {
         
