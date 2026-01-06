@@ -64,3 +64,46 @@ export const getMovieCatalog = async (req: any, res: Response) => {
 
 };
 
+export const searchMovies = async (req: any, res: Response) => {
+  try {
+    const { title, year } = req.body.query;
+
+    const matchStage: any = {};
+
+    if (title && typeof title === 'string' && title.trim() !== '') {
+      matchStage.title = { $regex: title.trim(), $options: 'i' };
+    }
+
+    if (year && !isNaN(Number(year))) {
+      matchStage.year = Number(year);
+    }
+
+    const results = await Movies.aggregate([
+      { $match: matchStage },
+      {
+        $project: {
+          _id: 1,
+          stringId: 1,
+          title: 1,
+          year: 1,
+          poster: 1,
+          genres: 1,
+          runtime: 1,
+          plot: 1,
+          "imdb.rating": 1,
+          "imdb.votes": 1,
+          genreMatchCount: 1,
+        },
+      },
+      { $sort: { 'imdb.rating': -1, year: -1 } }, // Better: highest rated first
+      { $limit: 50 },
+    ]);
+
+    const searchResults = thumbnailMovieFilters(results);
+
+    res.status(200).json(searchResults);
+  } catch (error: any) {
+    console.error('Search movies error:', error);
+    res.status(500).json({ message: 'Server error during search', error: error.message });
+  }
+};

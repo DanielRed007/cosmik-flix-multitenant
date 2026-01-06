@@ -2,7 +2,7 @@
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
 import type {} from '@redux-devtools/extension'; // Important for TS support
-import { MoviesState } from '@/types/movie';
+import { MoviesState, SearchMoviesQuery } from '@/types/movie';
 import { useProfileStore } from './profileStore';
 
 export const useMoviesStore = create<MoviesState>()(
@@ -12,7 +12,21 @@ export const useMoviesStore = create<MoviesState>()(
       myList: null,
       searchResults: null,
 
-      searchMovies: async () => {},
+      searchMovies: async (query: SearchMoviesQuery) => {
+
+
+        const res = await fetch('/api/dashboard/search', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ query }),
+          credentials: 'include',
+        });
+
+        const data = await res.json();
+
+        console.log({data});
+        set({ searchResults: data});
+      },
 
       getMovies: async () => {
         
