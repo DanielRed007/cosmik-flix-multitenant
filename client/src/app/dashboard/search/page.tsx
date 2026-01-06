@@ -17,6 +17,7 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Search } from 'lucide-react';
 import { Button } from '@/components/ui/button'; // ← Added Button import
+import { useProfileStore } from '@/store/profileStore';
 
 const genres = [
   { id: 28, name: 'Action' },
@@ -45,6 +46,7 @@ const years = Array.from({ length: currentYear - 1900 + 1 }, (_, i) => currentYe
 export default function SearchPage() {
   const { isAuthenticated } = useAuthStore();
   const { searchMovies, searchResults } = useMoviesStore();
+  const { getProfile } = useProfileStore();
   const router = useRouter();
 
   const [query, setQuery] = useState('');
@@ -55,6 +57,8 @@ export default function SearchPage() {
     if (!isAuthenticated) {
       router.push('/auth/sign-in');
     }
+
+    getProfile();
   }, [isAuthenticated, router]);
 
   if (!isAuthenticated) {
@@ -63,7 +67,7 @@ export default function SearchPage() {
 
   const handleSearch = () => {
     searchMovies({
-      query: query.trim(),
+      title: query.trim(),
       genreId: genre && genre !== 'all' ? Number(genre) : undefined,
       year: year && year !== 'all' ? Number(year) : undefined,
     });
@@ -79,22 +83,21 @@ export default function SearchPage() {
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-6 text-white">
-          {/* Search Form */}
+
           <div className="flex flex-col md:flex-row gap-4">
-            {/* Title Input */}
+
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-green-300 h-4 w-4" />
               <Input
                 placeholder="Search by title..."
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
-                className="pl-10 bg-green-900/50 border-green-700 text-white placeholder:text-green-400 focus:border-green-500"
+                className="pl-10 bg-green-900/50 text-white placeholder:text-green-400"
               />
             </div>
 
-            {/* Genre Dropdown */}
             <Select value={genre} onValueChange={setGenre}>
-              <SelectTrigger className="w-full md:w-64 bg-green-900/50 border-green-700 text-white">
+              <SelectTrigger className="w-full md:w-64 bg-green-900/50 text-white">
                 <SelectValue placeholder="All Genres" />
               </SelectTrigger>
               <SelectContent>
@@ -111,7 +114,7 @@ export default function SearchPage() {
 
             {/* Year Dropdown */}
             <Select value={year} onValueChange={setYear}>
-              <SelectTrigger className="w-full md:w-48 bg-green-900/50 border-green-700 text-white">
+              <SelectTrigger className="w-full md:w-48 bg-green-900/50 text-white">
                 <SelectValue placeholder="Any Year" />
               </SelectTrigger>
               <SelectContent>
@@ -153,7 +156,7 @@ export default function SearchPage() {
 
           {/* Optional: Show message when no search has been performed yet */}
           {!searchResults && (
-            <div className="flex h-64 items-center justify-center text-green-300">
+            <div className="flex h-64 items-center justify-center text-black">
               Enter search criteria and click "Search" to find movies.
             </div>
           )}

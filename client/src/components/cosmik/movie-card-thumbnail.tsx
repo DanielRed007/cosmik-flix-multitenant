@@ -21,15 +21,13 @@ export function MovieCardThumbnail({ movie }: { movie: Movie }) {
     id
   } = movie;
 
-  // Local state to track if this movie is "added"
   const [isAdded, setIsAdded] = useState(false);
   const [action, setAction] = useState("add")
   const { profile ,updateMoviesList } = useProfileStore();
 
-  const includedOnMovieList = (movieId: string, profile: any) => profile.favoriteMoviesList?.includes(movieId) 
+  const includedOnMovieList = (movieId: string, profile: any) => profile && profile.favoriteMoviesList?.includes(movieId) 
 
   useEffect(() => {
-
     if(includedOnMovieList(id, profile)){
       setIsAdded(true)
       setAction("remove")
@@ -54,10 +52,9 @@ export function MovieCardThumbnail({ movie }: { movie: Movie }) {
           </div>
         )}
 
-        {/* Add Button - Top Right */}
         <button
           onClick={(e) => {
-            e.stopPropagation(); // Prevent triggering parent clicks if any
+            e.stopPropagation();
             setIsAdded(!isAdded);
             updateMoviesList(movie.id, action)
           }}
@@ -65,7 +62,7 @@ export function MovieCardThumbnail({ movie }: { movie: Movie }) {
           aria-label={isAdded ? "Remove from list" : "Add to list"}
         >
           <div className="relative size-5">
-            {/* Plus icon */}
+
             <Plus
               className={`absolute inset-0 size-5 transition-all duration-300 ${
                 isAdded
@@ -73,7 +70,7 @@ export function MovieCardThumbnail({ movie }: { movie: Movie }) {
                   : "scale-100 rotate-0 opacity-100"
               }`}
             />
-            {/* Check icon */}
+
             <Check
               className={`absolute inset-0 size-5 text-green-400 transition-all duration-300 ${
                 isAdded
@@ -84,7 +81,7 @@ export function MovieCardThumbnail({ movie }: { movie: Movie }) {
           </div>
         </button>
 
-        {/* Overlay - appears on hover */}
+
         <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-black/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
           <div className="absolute inset-x-0 bottom-0 translate-y-4 group-hover:translate-y-0 transition-transform duration-300 pb-4 px-3">
             <CardTitle className="text-base leading-tight text-white drop-shadow-lg line-clamp-2">
@@ -109,7 +106,7 @@ export function MovieCardThumbnail({ movie }: { movie: Movie }) {
 
             <div className="flex items-center text-sm font-medium mt-3 text-white drop-shadow-md">
               <Star className="size-4 fill-yellow-400 text-yellow-400 mr-1" />
-              <span>{rating.toFixed(1)}</span>
+              <span>{rating && rating.toFixed(1)}</span>
               <span className="ml-1 text-white/80">IMDb</span>
             </div>
           </div>

@@ -12,12 +12,18 @@ export interface Movie {
   };
 };
 
+export interface SearchMoviesQuery {
+  title: string;
+  genreId: number | undefined;
+  year: number | undefined;
+}
+
 export interface MoviesState {
   movies: any;
   myList: any;
   searchResults: any;
 
-  searchMovies: (data: any) => any;
+  searchMovies: (data: SearchMoviesQuery) => any;
   getMovies: () => any;
   getMoviesMyList: () => any;
 }

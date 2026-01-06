@@ -2,7 +2,7 @@
 import { Router } from "express";
 
 import { authMiddleware } from "../middleware/auth.middleware";
-import { getMovieCatalog } from "../controllers/dashboard.controller";
+import { getMovieCatalog, searchMovies } from "../controllers/dashboard.controller";
 
 const router = Router();
 
@@ -52,6 +52,8 @@ const router = Router();
  */
 
 router.get("/", authMiddleware, getMovieCatalog);
+
+router.post("/search", authMiddleware, searchMovies);
 
 
 export default router;

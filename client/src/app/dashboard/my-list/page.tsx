@@ -41,7 +41,7 @@ export default function MyList() {
       {/* Left: Recent Movies */}
       <Card className="lg:col-span-2 h-full min-h-80 bg-transparent border-transparent">
         <CardHeader className="pb-0">
-          <CardTitle className="text-5xl font-bold">My List</CardTitle>
+          <CardTitle className="text-5xl text-white font-bold">My List</CardTitle>
         </CardHeader>
         <CardContent className="pt-0 h-full">
           <div className="grid grid-cols-4 sm:grid-cols-4 md:grid-cols-4 xl:grid-cols-4 gap-3 auto-rows-fr h-full overflow-y-auto">
