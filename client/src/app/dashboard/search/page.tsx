@@ -50,7 +50,7 @@ export default function SearchPage() {
   const router = useRouter();
 
   const [query, setQuery] = useState('');
-  const [genre, setGenre] = useState<string | undefined>(undefined);
+  const [genre, setGenre] = useState<string>('');
   const [year, setYear] = useState<string | undefined>(undefined);
 
   useEffect(() => {
@@ -68,14 +68,14 @@ export default function SearchPage() {
   const handleSearch = () => {
     searchMovies({
       title: query.trim(),
-      genreId: genre && genre !== 'all' ? Number(genre) : undefined,
+      genre: genre || '',
       year: year && year !== 'all' ? Number(year) : undefined,
     });
   };
 
   return (
     <div className="p-4 space-y-8">
-      <Card className="bg-electric-green-dark border-green-900">
+      <Card className="bg-electric-green-dark border-0 shadow-none">
         <CardHeader>
           <CardTitle className="text-5xl font-bold text-white">Search Movies</CardTitle>
           <CardDescription className="text-green-200">
@@ -102,9 +102,9 @@ export default function SearchPage() {
               </SelectTrigger>
               <SelectContent>
                 <SelectGroup>
-                  <SelectItem value="all">All Genres</SelectItem>
+                  <SelectItem value="all"></SelectItem>
                   {genres.map((g) => (
-                    <SelectItem key={g.id} value={String(g.id)}>
+                    <SelectItem key={g.id} value={String(g.name)}>
                       {g.name}
                     </SelectItem>
                   ))}
@@ -149,12 +149,11 @@ export default function SearchPage() {
           )}
 
           {searchResults && searchResults.length === 0 && (
-            <div className="flex h-64 items-center justify-center text-green-300">
+            <div className="flex h-64 items-center justify-center text-black">
               No movies found matching your criteria.
             </div>
           )}
 
-          {/* Optional: Show message when no search has been performed yet */}
           {!searchResults && (
             <div className="flex h-64 items-center justify-center text-black">
               Enter search criteria and click "Search" to find movies.

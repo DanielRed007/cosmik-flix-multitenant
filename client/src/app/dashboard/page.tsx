@@ -39,7 +39,7 @@ export default function Dashboard() {
     {/* Responsive layout: stacked on small/medium, side-by-side only on lg+ */}
     <div className="grid gap-4">
       {/* Left: Recent Movies */}
-      <Card className="lg:col-span-2 h-full min-h-80 bg-transparent border-transparent">
+      <Card className="lg:col-span-2 h-full min-h-80 bg-transparent border-0 shadow-none">
         <CardHeader className="pb-0">
           <CardTitle className="text-5xl text-white font-bold">Featured</CardTitle>
         </CardHeader>

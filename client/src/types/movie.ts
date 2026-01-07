@@ -14,7 +14,7 @@ export interface Movie {
 
 export interface SearchMoviesQuery {
   title: string;
-  genreId: number | undefined;
+  genre: string | undefined;
   year: number | undefined;
 }
 
