@@ -66,7 +66,7 @@ export const getMovieCatalog = async (req: any, res: Response) => {
 
 export const searchMovies = async (req: any, res: Response) => {
   try {
-    const { title, year } = req.body.query;
+    const { title, year, genre } = req.body.query;
 
     const matchStage: any = {};
 
@@ -74,12 +74,24 @@ export const searchMovies = async (req: any, res: Response) => {
       matchStage.title = { $regex: title.trim(), $options: 'i' };
     }
 
+    if (genre && typeof genre === 'string' && genre.trim() !== '') {
+      matchStage.genres = { $in: [genre] };
+    }
+
     if (year && !isNaN(Number(year))) {
       matchStage.year = Number(year);
     }
 
+    console.group("MatchStage", matchStage)
+
     const results = await Movies.aggregate([
-      { $match: matchStage },
+      { $match: {
+          ...matchStage,
+            poster: { 
+            $not: { $regex: /Poster for/i }
+          },
+        } 
+      },
       {
         $project: {
           _id: 1,

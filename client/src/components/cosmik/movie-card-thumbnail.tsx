@@ -93,7 +93,7 @@ export function MovieCardThumbnail({ movie }: { movie: Movie }) {
             </CardDescription>
 
             <div className="flex flex-wrap gap-1.5 mt-2.5">
-              {genres.map((genre) => (
+              {genres && genres.map((genre) => (
                 <Badge
                   key={genre}
                   variant="secondary"

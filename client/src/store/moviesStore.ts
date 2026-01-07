@@ -14,7 +14,7 @@ export const useMoviesStore = create<MoviesState>()(
 
       searchMovies: async (query: SearchMoviesQuery) => {
 
-
+        console.log("Query",{query});
         const res = await fetch('/api/dashboard/search', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },

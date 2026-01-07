@@ -9,7 +9,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { Home, BarChart, Settings } from "lucide-react";
+import { BadgeCheck, List, Search } from "lucide-react";
 
 export function AppSidebar() {
   return (
@@ -21,29 +21,38 @@ export function AppSidebar() {
       <SidebarContent className="flex items-center px-6 bg-gradient-to-br from-lime-100 via-electric-green-600 to-lime-300">
           <SidebarMenu>
 
-            <SidebarMenuItem className="bg-electric-green mt-3 font-bold">
-              <SidebarMenuButton asChild>
+            <SidebarMenuItem>
+              <SidebarMenuButton 
+                asChild 
+                className="mt-3 hover:bg-transparent hover:text-inherit data-[active]:bg-transparent data-[active]:text-inherit"
+              >
                 <a href="/dashboard/search">
-                  <Home className="mr-2 h-4 w-4" />
-                  <span>Search</span>
-                </a>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-            
-            <SidebarMenuItem className="bg-electric-green mt-1 font-bold">
-              <SidebarMenuButton asChild>
-                <a href="/dashboard">
-                  <Home className="mr-2 h-4 w-4" />
-                  <span>Featured</span>
+                  <Search className="mr-2 h-4 w-4" />
+                  <span className="font-bold">Search</span>
                 </a>
               </SidebarMenuButton>
             </SidebarMenuItem>
 
-            <SidebarMenuItem className="bg-electric-green mt-1 font-bold">
-              <SidebarMenuButton asChild>
+            <SidebarMenuItem>
+              <SidebarMenuButton 
+                asChild 
+                className="hover:bg-transparent hover:text-inherit data-[active]:bg-transparent data-[active]:text-inherit"
+              >
+                <a href="/dashboard">
+                  <BadgeCheck className="mr-2 h-4 w-4" />
+                  <span className="font-bold">Featured</span>
+                </a>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+
+            <SidebarMenuItem>
+              <SidebarMenuButton 
+                asChild 
+                className="hover:bg-transparent hover:text-inherit data-[active]:bg-transparent data-[active]:text-inherit"
+              >
                 <a href="/dashboard/my-list">
-                  <Home className="mr-2 h-4 w-4" />
-                  <span>My List</span>
+                  <List className="mr-2 h-4 w-4" />
+                  <span className="font-bold">My List</span>
                 </a>
               </SidebarMenuButton>
             </SidebarMenuItem>
@@ -51,7 +60,7 @@ export function AppSidebar() {
           </SidebarMenu>
       </SidebarContent>
 
-      <SidebarFooter className="p-4">
+      <SidebarFooter className="p-4 bg-gradient-to-br from-lime-100 via-electric-green-600 to-lime-300">
         <p className="text-xs text-muted-foreground text-center">
           © 2025 MyApp
         </p>
